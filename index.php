@@ -1,7 +1,6 @@
 <?php
-
     // URL del endpoint que deseas solicitar
-    $url = 'https://6480e394f061e6ec4d49ff4c.mockapi.io/Campers';
+    $url = 'https://6490c4ef2f2c7ee6c2c77bcf.mockapi.io/Campers';
 
     // Configurar las opciones del contexto de flujo
     $options = array(
@@ -14,20 +13,48 @@
 
     // Crear el contexto de flujo
     $context = stream_context_create($options);
-
     // Realizar la solicitud utilizando file_get_contents()
     $response = file_get_contents($url, false, $context);
-
     // Verificar si la solicitud fue exitosa
     if ($response === false) {
         // Manejar el error de la solicitud
         echo "Error al realizar la solicitud";
     } else {
-        // Procesar la respuesta
-        
+        // Procesar la respuesta        
         $data=json_decode($response,true);
-        print_r($data[0]["Nombre"]);
+        $table = '';
+        for($i=0;$i<count($data);$i++) 
+        {   
+            $id= $data[$i]["id"];
+            $cedula= $data[$i]["Cedula"];
+            $nombre= $data[$i]["Nombre"];
+            $apellido= $data[$i]["Apellido"];
+            $edad= $data[$i]["Edad"];
+            $email= $data[$i]["Email"];
+            $direccion= $data[$i]["Direccion"];        
+
+            $table.="<tr>
+            <td class=\"text-center border border-slate-300\">$id</td>
+            <td class=\"text-center border border-slate-300\">$cedula</td>
+            <td class=\"text-center border border-slate-300\">$nombre</td>
+            <td class=\"text-center border border-slate-300\">$apellido</td>
+            <td class=\"text-center border border-slate-300\">$edad</td>
+            <td class=\"text-center border border-slate-300\">$email</td>
+            <td class=\"text-center border border-slate-300\">$direccion</td>
+            <td class=\"text-center border border-slate-300\">
+                <button class=\"inline-flex items-center justify-center w-auto p-3 mx-2 my-2 font-medium text-white bg-indigo-600 border-indigo-500 rounded-lg hover:bg-indigo-500 hover:shadow\">
+                    <span>
+                        <svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-6 h-6\">
+                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5\" />
+                        </svg>
+                    </span>
+                </button>
+            </td>
+            </tr>";
+        }
     }
+
+    
 
 ?>
 
@@ -162,21 +189,8 @@
                         
                     </tr>
                 </thead>
-                <tbody id="tableUsuarios">
-                    <tr >
-                        <td class="text-center border border-slate-300">Cedula</td>
-                        <td class="text-center border border-slate-300 ">Nombre</td>
-                        <td class="text-center border border-slate-300 ">Apellido</td>
-                        <td class="text-center border border-slate-300 ">Edad</td>
-                        <td class="text-center border border-slate-300 ">Email</td>
-                        <td class="text-center border border-slate-300 ">Dirección</td>
-                        <td class="text-center border border-slate-300 "> <button class="inline-flex items-center justify-center w-auto p-3 mx-2 my-2 font-medium text-white bg-indigo-600 border-indigo-500 rounded-lg hover:bg-indigo-500 hover:shadow">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
-                        </svg>
-                        </span>
-                        </button> </td>                        
-                    </tr>               
+                <tbody id="tableUsuarios">                    
+                    <?php echo $table ?> 
                 </tbody>
             </table>
         </div>
